@@ -1,6 +1,5 @@
-FROM golang:1.19-alpine AS builder
-
-LABEL maintainer="Vic Shóstak <vic@shostak.dev> (https://shostak.dev/)"
+FROM golang:1.21-alpine AS builder
+LABEL maintainer="Viet Thuan <jakes.developer@gmail.com>"
 
 # Move to working directory (/build).
 WORKDIR /build

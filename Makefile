@@ -3,7 +3,7 @@
 APP_NAME = apiserver
 BUILD_DIR = $(PWD)/build
 MIGRATIONS_FOLDER = $(PWD)/platform/migrations
-DATABASE_URL = postgres://postgres:password@cgapp-postgres/postgres?sslmode=disable
+DATABASE_URL = postgres://postgres:password@prime-residence-postgres/postgres?sslmode=disable
 
 clean:
 	rm -rf ./build
@@ -47,14 +47,14 @@ docker.fiber.build:
 
 docker.fiber: docker.fiber.build
 	docker run --rm -d \
-		--name cgapp-fiber \
+		--name prime-residence-fiber \
 		--network dev-network \
 		-p 5000:5000 \
 		fiber
 
 docker.postgres:
 	docker run --rm -d \
-		--name cgapp-postgres \
+		--name prime-residence-postgres \
 		--network dev-network \
 		-e POSTGRES_USER=postgres \
 		-e POSTGRES_PASSWORD=password \
@@ -65,7 +65,7 @@ docker.postgres:
 
 docker.redis:
 	docker run --rm -d \
-		--name cgapp-redis \
+		--name prime-residence-redis \
 		--network dev-network \
 		-p 6379:6379 \
 		redis
@@ -73,13 +73,13 @@ docker.redis:
 docker.stop: docker.stop.fiber docker.stop.postgres docker.stop.redis
 
 docker.stop.fiber:
-	docker stop cgapp-fiber
+	docker stop prime-residence-fiber
 
 docker.stop.postgres:
-	docker stop cgapp-postgres
+	docker stop prime-residence-postgres
 
 docker.stop.redis:
-	docker stop cgapp-redis
+	docker stop prime-residence-redis
 
 swag:
 	swag init

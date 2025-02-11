@@ -1,7 +1,3 @@
-# Fiber backend template for [Create Go App CLI](https://github.com/create-go-app/cli)
-
-<img src="https://img.shields.io/badge/Go-1.19+-00ADD8?style=for-the-badge&logo=go" alt="go version" />&nbsp;<a href="https://goreportcard.com/report/github.com/create-go-app/fiber-go-template" target="_blank"><img src="https://img.shields.io/badge/Go_report-A+-success?style=for-the-badge&logo=none" alt="go report" /></a>&nbsp;<img src="https://img.shields.io/badge/license-Apache_2.0-red?style=for-the-badge&logo=none" alt="license" />
-
 [Fiber](https://gofiber.io/) is an Express.js inspired web framework build on top of Fasthttp, the fastest HTTP engine for Go. Designed to ease things up for **fast** development with **zero memory allocation** and **performance** in mind.
 
 ## ⚡️ Quick start
@@ -9,7 +5,7 @@
 1. Create a new project with Fiber:
 
 ```bash
-cgapp create
+prime-residence create
 
 # Choose a backend framework:
 #   net/http
@@ -91,7 +87,7 @@ JWT_REFRESH_KEY_EXPIRE_HOURS_COUNT=720
 
 # Database settings:
 DB_TYPE="pgx"   # pgx or mysql
-DB_HOST="cgapp-postgres"
+DB_HOST="prime-residence-postgres"
 DB_PORT=5432
 DB_USER="postgres"
 DB_PASSWORD="password"
@@ -102,12 +98,8 @@ DB_MAX_IDLE_CONNECTIONS=10
 DB_MAX_LIFETIME_CONNECTIONS=2
 
 # Redis settings:
-REDIS_HOST="cgapp-redis"
+REDIS_HOST="prime-residence-redis"
 REDIS_PORT=6379
 REDIS_PASSWORD=""
 REDIS_DB_NUMBER=0
 ```
-
-## ⚠️ License
-
-Apache 2.0 &copy; [Vic Shóstak](https://shostak.dev/) & [True web artisans](https://1wa.co/).

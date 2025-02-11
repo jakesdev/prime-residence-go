@@ -15,22 +15,22 @@ func GetCredentialsByRole(role string) ([]string, error) {
 	switch role {
 	case repository.AdminRoleName:
 		// Admin credentials (all access).
-		credentials = []string{
-			repository.BookCreateCredential,
-			repository.BookUpdateCredential,
-			repository.BookDeleteCredential,
-		}
+		// credentials = []string{
+		// 	repository.BookCreateCredential,
+		// 	repository.BookUpdateCredential,
+		// 	repository.BookDeleteCredential,
+		// }
 	case repository.ModeratorRoleName:
 		// Moderator credentials (only book creation and update).
-		credentials = []string{
-			repository.BookCreateCredential,
-			repository.BookUpdateCredential,
-		}
+		// credentials = []string{
+		// 	repository.BookCreateCredential,
+		// 	repository.BookUpdateCredential,
+		// }
 	case repository.UserRoleName:
 		// Simple user credentials (only book creation).
-		credentials = []string{
-			repository.BookCreateCredential,
-		}
+		// credentials = []string{
+		// 	repository.BookCreateCredential,
+		// }
 	default:
 		// Return error message.
 		return nil, fmt.Errorf("role '%v' does not exist", role)
