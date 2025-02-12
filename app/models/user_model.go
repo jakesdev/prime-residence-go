@@ -15,4 +15,5 @@ type User struct {
 	PasswordHash string    `db:"password_hash" json:"password_hash,omitempty" validate:"required,lte=255"`
 	UserStatus   int       `db:"user_status" json:"user_status" validate:"required,len=1"`
 	UserRole     string    `db:"user_role" json:"user_role" validate:"required,lte=25"`
+	RegisterType string    `db:"register_type" json:"register_type" validate:"required,lte=25"`
 }

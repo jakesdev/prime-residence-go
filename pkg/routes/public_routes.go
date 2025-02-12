@@ -13,4 +13,5 @@ func PublicRoutes(a *fiber.App) {
 	// Routes for POST method:
 	route.Post("/user/sign/up", controllers.UserSignUp) // register a new user
 	route.Post("/user/sign/in", controllers.UserSignIn) // auth, return Access & Refresh tokens
+	route.Post("/user/google/sign/in", controllers.UserGoogleSignIn) // auth via Google, return Access & Refresh tokens
 }

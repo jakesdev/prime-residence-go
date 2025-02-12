@@ -15,7 +15,8 @@ CREATE TABLE users (
     email VARCHAR (255) NOT NULL UNIQUE,
     password_hash VARCHAR (255) NOT NULL,
     user_status INT NOT NULL,
-    user_role VARCHAR (25) NOT NULL
+    user_role VARCHAR (25) NOT NULL,
+    register_type VARCHAR (25) NOT NULL
 );
 
 -- Add indexes

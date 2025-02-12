@@ -62,6 +62,40 @@ const docTemplate = `{
                 }
             }
         },
+        "/v1/user/google/sign/in": {
+            "post": {
+                "description": "Auth user via Google and return access and refresh token.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "auth user via Google and return access and refresh token",
+                "parameters": [
+                    {
+                        "description": "User Email",
+                        "name": "email",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/user/sign/in": {
             "post": {
                 "description": "Auth user and return access and refresh token.",
@@ -192,6 +226,7 @@ const docTemplate = `{
             "required": [
                 "email",
                 "id",
+                "login_type",
                 "password_hash",
                 "user_role",
                 "user_status"
@@ -206,6 +241,10 @@ const docTemplate = `{
                 },
                 "id": {
                     "type": "string"
+                },
+                "login_type": {
+                    "type": "string",
+                    "maxLength": 25
                 },
                 "password_hash": {
                     "type": "string",

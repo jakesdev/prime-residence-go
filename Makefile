@@ -47,15 +47,15 @@ docker.fiber: docker.fiber.build
 		-p 5000:5000 \
 		fiber
 
-# docker.postgres:
-# 	docker run --rm -d \
-# 		--name prime-residence-postgres \
-# 		-e POSTGRES_USER=postgres \
-# 		-e POSTGRES_PASSWORD=password \
-# 		-e POSTGRES_DB=prime_residence \
-# 		-e POSTGRES_INITDB_ARGS=--auth-local=md5 \
-# 		-p 5432:5432 \
-# 		postgres:latest
+docker.postgres:
+	docker run --rm -d \
+		--name prime-residence-postgres \
+		-e POSTGRES_USER=postgres \
+		-e POSTGRES_PASSWORD=password \
+		-e POSTGRES_DB=prime_residence \
+		-e POSTGRES_INITDB_ARGS=--auth-local=md5 \
+		-p 5432:5432 \
+		postgres:latest
 
 docker.redis:
 	docker run --rm -d \

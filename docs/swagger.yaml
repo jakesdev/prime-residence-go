@@ -9,6 +9,9 @@ definitions:
         type: string
       id:
         type: string
+      login_type:
+        maxLength: 25
+        type: string
       password_hash:
         maxLength: 255
         type: string
@@ -22,6 +25,7 @@ definitions:
     required:
     - email
     - id
+    - login_type
     - password_hash
     - user_role
     - user_status
@@ -62,6 +66,28 @@ paths:
       summary: renew access and refresh tokens
       tags:
       - Token
+  /v1/user/google/sign/in:
+    post:
+      consumes:
+      - application/json
+      description: Auth user via Google and return access and refresh token.
+      parameters:
+      - description: User Email
+        in: body
+        name: email
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      summary: auth user via Google and return access and refresh token
+      tags:
+      - User
   /v1/user/sign/in:
     post:
       consumes:

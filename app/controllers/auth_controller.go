@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/create-go-app/fiber-go-template/app/models"
@@ -27,7 +28,6 @@ import (
 func UserSignUp(c *fiber.Ctx) error {
 	// Create a new user auth struct.
 	signUp := &models.SignUp{}
-
 	// Checking received data from JSON body.
 	if err := c.BodyParser(signUp); err != nil {
 		// Return status 400 and error message.
@@ -36,6 +36,7 @@ func UserSignUp(c *fiber.Ctx) error {
 			"msg":   err.Error(),
 		})
 	}
+	fmt.Println("signUp", signUp)
 
 	// Create a new validator for a User model.
 	validate := utils.NewValidator()
@@ -79,7 +80,8 @@ func UserSignUp(c *fiber.Ctx) error {
 	user.PasswordHash = utils.GeneratePassword(signUp.Password)
 	user.UserStatus = 1 // 0 == blocked, 1 == active
 	user.UserRole = role
-
+	user.RegisterType = "register"
+	fmt.Println("user", user)
 	// Validate user fields.
 	if err := validate.Struct(user); err != nil {
 		// Return, if some fields are not valid.
@@ -215,6 +217,105 @@ func UserSignIn(c *fiber.Ctx) error {
 		},
 	})
 }
+
+
+// UserGoogleSignIn method to auth user via Google and return access and refresh tokens.
+// @Description Auth user via Google and return access and refresh token.
+// @Summary auth user via Google and return access and refresh token
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param email body string true "User Email"
+// @Success 200 {string} status "ok"
+// @Router /v1/user/google/sign/in [post]
+func UserGoogleSignIn(c *fiber.Ctx) error {
+	// Create a new user auth struct.
+	signIn := &models.GoogleSignIn{}
+
+	// Checking received data from JSON body.
+	if err := c.BodyParser(signIn); err != nil {
+		// Return status 400 and error message.
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": true,
+			"msg":   err.Error(),
+		})
+	}
+
+	// Create database connection.
+	db, err := database.OpenDBConnection()
+	if err != nil {
+		// Return status 500 and database connection error.
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": true,
+			"msg":   err.Error(),
+		})
+	}
+
+	// Get user by email.
+	foundedUser, err := db.GetUserByEmail(signIn.Email)
+	if err != nil {
+		// Return, if user not found.
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"error": true,
+			"msg":   "user with the given email is not found",
+		})
+	}
+
+	// Get role credentials from founded user.
+	credentials, err := utils.GetCredentialsByRole(foundedUser.UserRole)
+	if err != nil {
+		// Return status 400 and error message.
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": true,
+			"msg":   err.Error(),
+		})
+	}
+
+	// Generate a new pair of access and refresh tokens.
+	tokens, err := utils.GenerateNewTokens(foundedUser.ID.String(), credentials)
+	if err != nil {
+		// Return status 500 and token generation error.
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": true,
+			"msg":   err.Error(),
+		})
+	}
+
+	// Define user ID.
+	userID := foundedUser.ID.String()
+
+	// Create a new Redis connection.
+	connRedis, err := cache.RedisConnection()
+	if err != nil {
+		// Return status 500 and Redis connection error.
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": true,
+			"msg":   err.Error(),
+		})
+	}
+
+	// Save refresh token to Redis.
+	errSaveToRedis := connRedis.Set(context.Background(), userID, tokens.Refresh, 0).Err()
+	if errSaveToRedis != nil {
+		// Return status 500 and Redis connection error.
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": true,
+			"msg":   errSaveToRedis.Error(),
+		})
+	}
+
+
+	// Return status 200 OK.
+	return c.JSON(fiber.Map{
+		"error": false,
+		"msg":   nil,
+		"tokens": fiber.Map{
+			"access":  tokens.Access,
+			"refresh": tokens.Refresh,
+		},
+	})
+}
+
 
 // UserSignOut method to de-authorize user and delete refresh token from Redis.
 // @Description De-authorize user and delete refresh token from Redis.
